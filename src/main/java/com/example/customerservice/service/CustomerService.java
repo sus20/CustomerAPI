@@ -23,6 +23,10 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Customer getCustomerById(ObjectId id) {
+        return customerRepository.findById(id).orElse(null);
+    }
+
 
 
 }
