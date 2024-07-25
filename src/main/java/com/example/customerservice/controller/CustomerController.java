@@ -23,4 +23,9 @@ public class CustomerController {
         return customerService.saveCustomer(customer);
     }
 
+    @GetMapping
+    public List<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
+    }
+
 }
