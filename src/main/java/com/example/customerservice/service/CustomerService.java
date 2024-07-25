@@ -27,6 +27,18 @@ public class CustomerService {
         return customerRepository.findById(id).orElse(null);
     }
 
+    public Customer updateCustomer(ObjectId id, Customer customerDetails) {
+        Customer existingCustomer = customerRepository.findById(id).orElse(null);
+        if (existingCustomer != null) {
+            existingCustomer.setName(customerDetails.getName());
+            existingCustomer.setAge(customerDetails.getAge());
+            return customerRepository.save(existingCustomer);
+        } else {
+            return null; // or throw an exception
+        }
+    }
+
+
 
 
 }
