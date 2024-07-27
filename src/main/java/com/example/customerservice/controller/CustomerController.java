@@ -20,6 +20,7 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Customer createCustomer(@RequestBody Customer customer) {
+
         return customerService.saveCustomer(customer);
     }
 

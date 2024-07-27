@@ -30,8 +30,12 @@ public class CustomerService {
     public Customer updateCustomer(ObjectId id, Customer customerDetails) {
         Customer existingCustomer = customerRepository.findById(id).orElse(null);
         if (existingCustomer != null) {
-            existingCustomer.setName(customerDetails.getName());
-            existingCustomer.setAge(customerDetails.getAge());
+            existingCustomer.setFirstName(customerDetails.getFirstName());
+            existingCustomer.setMiddleName(customerDetails.getMiddleName());
+            existingCustomer.setLastName(customerDetails.getLastName());
+            existingCustomer.setEmail(customerDetails.getEmail());
+            existingCustomer.setPhoneNumber(customerDetails.getPhoneNumber());
+            existingCustomer.setAddress(customerDetails.getAddress());
             return customerRepository.save(existingCustomer);
         } else {
             return null; // or throw an exception
