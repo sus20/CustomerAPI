@@ -18,20 +18,29 @@ public class CustomerController {
     private CustomerService customerService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody Customer customer) {
-
-        return customerService.saveCustomer(customer);
+    public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
+        try {
+            Customer savedCustomer = customerService.saveCustomer(customer);
+            return new ResponseEntity<>(savedCustomer, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public ResponseEntity<List<Customer>> getAllCustomers() {
+        List<Customer> customers = customerService.getAllCustomers();
+        return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Customer getCustomer(@PathVariable ObjectId id) {
-        return customerService.getCustomerById(id);
+    public ResponseEntity<Customer> getCustomer(@PathVariable ObjectId id) {
+        Customer customer = customerService.getCustomerById(id);
+        if(customer != null){
+            return new ResponseEntity<>(customer,HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/{id}")
@@ -46,8 +55,15 @@ public class CustomerController {
 
 
     @DeleteMapping("/{id}")
-    public void deleteCustomer(@PathVariable ObjectId id) {
-        customerService.deleteCustomer(id);
+    public ResponseEntity<Void> deleteCustomer(@PathVariable ObjectId id) {
+        try{
+            customerService.deleteCustomer(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (IllegalArgumentException e){
+            return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
+
 
 }
