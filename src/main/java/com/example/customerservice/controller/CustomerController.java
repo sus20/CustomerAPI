@@ -2,7 +2,6 @@ package com.example.customerservice.controller;
 
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.service.CustomerService;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable ObjectId id) {
+    public ResponseEntity<Customer> getCustomer(@PathVariable String id) {
         Customer customer = customerService.getCustomerById(id);
         if(customer != null){
             return new ResponseEntity<>(customer,HttpStatus.OK);
@@ -44,7 +43,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable ObjectId id, @RequestBody Customer customerDetails) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable String id, @RequestBody Customer customerDetails) {
         Customer updatedCustomer = customerService.updateCustomer(id, customerDetails);
         if (updatedCustomer != null) {
             return new ResponseEntity<>(updatedCustomer, HttpStatus.OK);
@@ -54,7 +53,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable ObjectId id) {
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
         try{
             customerService.deleteCustomer(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
