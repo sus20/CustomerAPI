@@ -1,10 +1,8 @@
 package com.example.customerservice.service;
 
-
 import com.example.customerservice.model.Bank;
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.CustomerRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,16 +34,15 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-
     public List<Customer> getAllCustomers() {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomerById(ObjectId id) {
+    public Customer getCustomerById(String id) {
         return customerRepository.findById(id).orElse(null);
     }
 
-    public Customer updateCustomer(ObjectId id, Customer customerDetails) {
+    public Customer updateCustomer(String id, Customer customerDetails) {
         Customer existingCustomer = customerRepository.findById(id).orElse(null);
         if (existingCustomer != null) {
             existingCustomer.setFirstName(customerDetails.getFirstName());
@@ -61,12 +58,9 @@ public class CustomerService {
         }
     }
 
-    public void deleteCustomer(ObjectId id) {
-
+    public void deleteCustomer(String id) {
         customerRepository.deleteById(id);
     }
-
-
 }
 
 

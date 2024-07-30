@@ -1,6 +1,6 @@
 package com.example.customerservice.model;
 
-
+import com.fasterxml.jackson.databind.introspect.ObjectIdInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,22 +9,20 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "customers")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Document(collection = "customers")
 public class Customer {
-
     @Id
-    private ObjectId id; // ObjectId id
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private Address address;
+    private String      _id;
+    private String      firstName;
+    private String      middleName;
+    private String      lastName;
+    private String      email;
+    private String      phoneNumber;
+    private Address     address;
 
     @DBRef
-    private Bank bankDetails;
-
+    private Bank        bankDetails;
 }

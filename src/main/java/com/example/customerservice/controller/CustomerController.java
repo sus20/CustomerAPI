@@ -53,7 +53,6 @@ public class CustomerController {
         }
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable ObjectId id) {
         try{
@@ -63,7 +62,4 @@ public class CustomerController {
             return  new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
-
 }
