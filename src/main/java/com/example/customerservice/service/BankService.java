@@ -2,16 +2,17 @@ package com.example.customerservice.service;
 
 import com.example.customerservice.model.Bank;
 import com.example.customerservice.repository.BankRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class BankService {
 
-    @Autowired
-    private BankRepository bankRepository;
+
+    private final BankRepository bankRepository;
 
     public Bank saveBank(Bank bank) {
         return bankRepository.save(bank);

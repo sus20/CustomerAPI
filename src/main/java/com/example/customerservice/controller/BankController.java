@@ -2,6 +2,7 @@ package com.example.customerservice.controller;
 
 import com.example.customerservice.model.Bank;
 import com.example.customerservice.service.BankService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/banks")
 public class BankController {
 
-    @Autowired
-    private BankService bankService;
+    private final BankService bankService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

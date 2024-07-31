@@ -3,19 +3,17 @@ package com.example.customerservice.service;
 import com.example.customerservice.model.Bank;
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class CustomerService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
-    private BankService bankService;
+    private final CustomerRepository customerRepository;
+    private final BankService bankService;
 
     public Customer saveCustomer(Customer customer) {
         if (customer.getBankDetails() != null && customer.getBankDetails().getId() != null) {

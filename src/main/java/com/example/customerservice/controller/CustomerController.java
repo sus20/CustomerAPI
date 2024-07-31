@@ -2,6 +2,7 @@ package com.example.customerservice.controller;
 
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.service.CustomerService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/customers")
 public class CustomerController {
 
-    @Autowired
-    private CustomerService customerService;
+    private final CustomerService customerService;
 
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody Customer customer) {
