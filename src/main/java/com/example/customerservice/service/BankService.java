@@ -12,7 +12,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class BankService {
 
-
     private final BankRepository bankRepository;
 
     public Bank saveBank(Bank bank) {
@@ -28,24 +27,18 @@ public class BankService {
     }
 
     public Bank updateBank(String id, Bank updatedBank) {
-       Optional <Bank> bankDetails  = bankRepository.findById(id);
+        Bank existingBank = bankRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(("Bank with ID " + id + " does not exist.")));
 
-        if (bankDetails.isEmpty()) {
-            throw new IllegalArgumentException("Bank with ID " + id + " does not exist.");
-        }
-        Bank existingBank = bankDetails.get();
-        existingBank.setBankName(updatedBank.getBankName());
-        existingBank.setAccountNumber(updatedBank.getAccountNumber());
-        existingBank.setAccountType(updatedBank.getAccountType());
-        existingBank.setSortCode(updatedBank.getSortCode());
-        existingBank.setSwiftCode(updatedBank.getSwiftCode());
-        return bankRepository.save(existingBank);
+        updatedBank.setId(existingBank.getId());
+        return bankRepository.save(updatedBank);
     }
 
     public void deleteBank(String id) {
         if (!bankRepository.existsById(id)) {
             throw new IllegalArgumentException("Bank with ID " + id + " does not exist.");
         }
+
         bankRepository.deleteById(id);
     }
 }

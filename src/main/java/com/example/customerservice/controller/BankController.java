@@ -27,10 +27,8 @@ public class BankController {
     @GetMapping("/{id}")
     public ResponseEntity<Bank> getBank(@PathVariable String id) {
         Optional<Bank> bank = bankService.getBankById(id);
-        if (bank.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(bank.get(), HttpStatus.OK);
+        return bank.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping
@@ -41,21 +39,13 @@ public class BankController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Bank> updateBank(@PathVariable String id, @RequestBody Bank updatedBank) {
-        try {
-            Bank bank = bankService.updateBank(id, updatedBank);
-            return new ResponseEntity<>(bank, HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        Bank bank = bankService.updateBank(id, updatedBank);
+        return new ResponseEntity<>(bank, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBank(@PathVariable String id) {
-        try {
-            bankService.deleteBank(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        bankService.deleteBank(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

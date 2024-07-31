@@ -14,17 +14,8 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final BankService bankService;
 
     public Customer saveCustomer(Customer customer) {
-        if (customer.getBankDetails() == null || customer.getBankDetails().getId() == null) {
-            throw new IllegalArgumentException("Bank details are missing.");
-        }
-        Optional<Bank> bank = bankService.getBankById(customer.getBankDetails().getId());
-        if(bank.isEmpty()){
-            throw new IllegalArgumentException("Bank with ID " + customer.getBankDetails().getId() + " does not exist.");
-        }
-        customer.setBankDetails(bank.get());
         return customerRepository.save(customer);
     }
 
@@ -33,23 +24,16 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(String id) {
-        return customerRepository.findById(id).orElse(null);
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Customer with ID " + id + " does not exist."));
     }
 
-    public Customer updateCustomer(String id, Customer customerDetails) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {
-            throw new IllegalArgumentException("Customer with ID " + id + " does not exist.");
-        }
-        Customer existingCustomer = customer.get();
-        existingCustomer.setFirstName(customerDetails.getFirstName());
-        existingCustomer.setMiddleName(customerDetails.getMiddleName());
-        existingCustomer.setLastName(customerDetails.getLastName());
-        existingCustomer.setEmail(customerDetails.getEmail());
-        existingCustomer.setPhoneNumber(customerDetails.getPhoneNumber());
-        existingCustomer.setAddress(customerDetails.getAddress());
-        existingCustomer.setBankDetails(customerDetails.getBankDetails());
-        return customerRepository.save(existingCustomer);
+    public Customer updateCustomer(String id, Customer updatedCustomer) {
+        Customer customer = customerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Customer with ID " + id + " does not exist."));
+
+        updatedCustomer.set_id(customer.get_id());
+        return customerRepository.save(updatedCustomer);
     }
 
     public void deleteCustomer(String id) {
