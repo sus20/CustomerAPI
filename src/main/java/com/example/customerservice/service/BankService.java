@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -18,8 +19,8 @@ public class BankService {
         return bankRepository.save(bank);
     }
 
-    public Bank getBankById(String id) {
-        return bankRepository.findById(id).orElse(null);
+    public Optional<Bank> getBankById(String id) {
+        return bankRepository.findById(id);
     }
 
     public List<Bank> getAllBanks() {
@@ -27,27 +28,24 @@ public class BankService {
     }
 
     public Bank updateBank(String id, Bank updatedBank) {
-        // Check if the bank exists
-        Bank existingBank = bankRepository.findById(id).orElse(null);
+       Optional <Bank> bankDetails  = bankRepository.findById(id);
 
-        if (existingBank!= null) {
-            // Update the fields as needed
-            existingBank.setBankName(updatedBank.getBankName());
-            existingBank.setAccountNumber(updatedBank.getAccountNumber());
-            existingBank.setAccountType(updatedBank.getAccountType());
-            existingBank.setSortCode(updatedBank.getSortCode());
-            existingBank.setSwiftCode(updatedBank.getSwiftCode());
-            return bankRepository.save(existingBank);
-        } else {
+        if (bankDetails.isEmpty()) {
             throw new IllegalArgumentException("Bank with ID " + id + " does not exist.");
         }
+        Bank existingBank = bankDetails.get();
+        existingBank.setBankName(updatedBank.getBankName());
+        existingBank.setAccountNumber(updatedBank.getAccountNumber());
+        existingBank.setAccountType(updatedBank.getAccountType());
+        existingBank.setSortCode(updatedBank.getSortCode());
+        existingBank.setSwiftCode(updatedBank.getSwiftCode());
+        return bankRepository.save(existingBank);
     }
 
     public void deleteBank(String id) {
-        if (bankRepository.existsById(id)) {
-            bankRepository.deleteById(id);
-        } else {
+        if (!bankRepository.existsById(id)) {
             throw new IllegalArgumentException("Bank with ID " + id + " does not exist.");
         }
+        bankRepository.deleteById(id);
     }
 }

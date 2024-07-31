@@ -3,12 +3,12 @@ package com.example.customerservice.controller;
 import com.example.customerservice.model.Bank;
 import com.example.customerservice.service.BankService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
@@ -26,12 +26,11 @@ public class BankController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Bank> getBank(@PathVariable String id) {
-        Bank bank = bankService.getBankById(id);
-        if (bank != null) {
-            return new ResponseEntity<>(bank, HttpStatus.OK);
-        } else {
+        Optional<Bank> bank = bankService.getBankById(id);
+        if (bank.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(bank.get(), HttpStatus.OK);
     }
 
     @GetMapping
