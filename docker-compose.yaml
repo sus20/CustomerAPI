@@ -11,12 +11,16 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - mongo_network
 
   mongo-express:
     image: mongo-express:latest
     container_name: mongo-express
     depends_on:
       - mongodb
+    networks:
+      - mongo_network
     ports:
       - "8000:8081"
     environment:
@@ -24,5 +28,23 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_SERVER: mongodb
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customer-service-app
+    environment:
+      - SPRING_DATA_MONGODB_DATABASE=${MONGO_DATABASE}
+      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=${MONGO_AUTH_DB}
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mongodb
+    networks:
+      - mongo_network
+
 volumes:
   mongodb_data:
+
+networks:
+  mongo_network:
