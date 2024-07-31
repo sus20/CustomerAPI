@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,8 @@ public class Bank {
     private String accountType;
     private String sortCode;
     private String swiftCode;
+
+    public void generateID() {
+        this.id = UUID.randomUUID().toString();
+    }
 }

@@ -15,6 +15,7 @@ public class BankService {
     private final BankRepository bankRepository;
 
     public Bank saveBank(Bank bank) {
+        bank.generateID();
         return bankRepository.save(bank);
     }
 

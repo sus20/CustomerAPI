@@ -9,13 +9,15 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.UUID;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "customers")
 public class Customer {
     @Id
-    private String      _id;
+    private String      id;
     private String      firstName;
     private String      middleName;
     private String      lastName;
@@ -25,4 +27,8 @@ public class Customer {
 
     @DBRef
     private Bank        bankDetails;
+
+    public void generateID() {
+        this.id = UUID.randomUUID().toString();
+    }
 }
