@@ -8,9 +8,11 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+    env_file:
+      - .env.stg
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
     networks:
       - mongo_network
 
@@ -23,10 +25,12 @@ services:
       - mongo_network
     ports:
       - "8000:8081"
+    env_file:
+      - .env.stg
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: ${MONGO_HOST}
 
 
   app:
@@ -34,6 +38,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: customer-service-app
+    env_file:
+      - .env.stg
     environment:
       - SPRING_DATA_MONGODB_DATABASE=${MONGO_DATABASE}
       - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DATABASE}?authSource=${MONGO_AUTH_DB}

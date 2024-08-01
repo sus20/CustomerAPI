@@ -1,5 +1,6 @@
 package com.example.customerservice.service;
 
+import com.example.customerservice.model.Bank;
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
@@ -12,9 +13,16 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final BankService bankService;
 
     public Customer saveCustomer(Customer customer) {
         customer.generateID();
+        if (customer.getBankDetails() != null && customer.getBankDetails().getId() != null) {
+            Bank bank = bankService.getBankById(customer.getBankDetails().getId())
+                                    .orElseThrow(() -> new IllegalArgumentException(("Bank with ID " + customer.getBankDetails().getId() + "does not exist.")));
+            customer.setBankDetails(bank);
+
+        }
         return customerRepository.save(customer);
     }
 
