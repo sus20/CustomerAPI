@@ -38,6 +38,11 @@ public class CustomerController {
                 new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
+    @GetMapping("/check/{customerId}")
+    public boolean isRegistered(@PathVariable String customerId) {
+        return customerService.isCustomerRegistered(customerId);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable String id, @RequestBody Customer customerDetails) {
         Customer customer = customerService.updateCustomer(id, customerDetails);

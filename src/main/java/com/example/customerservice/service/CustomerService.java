@@ -46,6 +46,10 @@ public class CustomerService {
     public void deleteCustomer(String id) {
         customerRepository.deleteById(id);
     }
+
+    public boolean isCustomerRegistered(String customerId) {
+        return customerRepository.existsById(customerId);
+    }
 }
 
 
