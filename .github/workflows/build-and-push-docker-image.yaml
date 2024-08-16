@@ -1,9 +1,13 @@
 name: Build and Push Docker Image
 
 on:
-  push:
-    branches:
-      - master  # or whichever branch you want to trigger this workflow
+  # Trigger on push to the master branch (commented out)
+  # push:
+  #   branches:
+  #     - master  # or whichever branch you want to trigger this workflow
+
+  # Allows manual triggering of the workflow
+  workflow_dispatch:
 
 jobs:
   build-and-push:
