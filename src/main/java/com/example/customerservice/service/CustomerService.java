@@ -1,6 +1,6 @@
 package com.example.customerservice.service;
 
-import com.example.customerservice.exception.CustomerNotFoundException;
+import com.example.customerservice.exception.customer.CustomerNotFoundException;
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.AddressRepository;
 import com.example.customerservice.repository.BankRepository;
@@ -16,15 +16,15 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final BankRepository     bankRepository;
-    private final AddressRepository  addressRepository;
+    private final BankRepository bankRepository;
+    private final AddressRepository addressRepository;
 
     public Customer saveCustomer(Customer customer) {
         customer.generateID();
-        if(!ObjectUtils.isEmpty(customer.getAddresses())) {
+        if (!ObjectUtils.isEmpty(customer.getAddresses())) {
             addressRepository.saveAll(customer.getAddresses());
         }
-        if(!ObjectUtils.isEmpty(customer.getBankAccounts())) {
+        if (!ObjectUtils.isEmpty(customer.getBankAccounts())) {
             bankRepository.saveAll(customer.getBankAccounts());
         }
         return customerRepository.save(customer);
@@ -58,9 +58,9 @@ public class CustomerService {
         return customerRepository.existsById(id);
     }
 
-    private void verifyCustomerIdConsistency(String customerId, Customer customer){
-        if(!customer.getId().equals(customerId)) {
-            throw new IllegalArgumentException("Customer with ID " + customerId + " does not exist.");
+    private void verifyCustomerIdConsistency(String customerId, Customer customer) {
+        if (!customer.getId().equals(customerId)) {
+            throw new CustomerNotFoundException(customerId);
         }
     }
 }

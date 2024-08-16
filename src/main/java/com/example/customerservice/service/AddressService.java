@@ -1,6 +1,10 @@
 package com.example.customerservice.service;
 
-import com.example.customerservice.exception.AddressNotFoundException;
+import com.example.customerservice.exception.address.AddressAlreadyExistsException;
+import com.example.customerservice.exception.address.AddressIdMismatchException;
+import com.example.customerservice.exception.address.AddressNotBelongToCustomerException;
+import com.example.customerservice.exception.address.AddressNotFoundException;
+import com.example.customerservice.exception.customer.CustomerNotFoundException;
 import com.example.customerservice.model.Address;
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.AddressRepository;
@@ -10,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -41,8 +44,8 @@ public class AddressService {
 
     public Address updateAddress(String customerId, String addressId, Address updatedAddress) {
         Customer customer = getCustomer(customerId);
-        verifyAddressIdConsistency(addressId,updatedAddress);
-        verifyAddressBelongsToCustomer(customer,addressId);
+        verifyAddressIdConsistency(addressId, updatedAddress);
+        verifyAddressBelongsToCustomer(customer, addressId);
 
         return addressRepository.save(updatedAddress);
     }
@@ -59,10 +62,10 @@ public class AddressService {
 
     private Customer getCustomer(String customerId) {
         return customerRepository.findById(customerId)
-                .orElseThrow(() -> new NoSuchElementException("Customer not found."));
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
-    private Address getAddress (String addressId) {
+    private Address getAddress(String addressId) {
         return addressRepository.findById(addressId)
                 .orElseThrow(() -> new AddressNotFoundException(addressId));
     }
@@ -72,13 +75,13 @@ public class AddressService {
                 .stream()
                 .anyMatch(existingAddress -> existingAddress.equals(address));
         if (hasDuplicate) {
-            throw new IllegalArgumentException("Address already exists.");
+            throw new AddressAlreadyExistsException();
         }
     }
 
     private void verifyAddressIdConsistency(String addressPathId, Address updatedAddress) {
         if (!StringUtils.pathEquals(updatedAddress.getId(), addressPathId)) {
-            throw new IllegalArgumentException("ID in body of address does not match ID in path");
+            throw new AddressIdMismatchException();
         }
     }
 
@@ -88,7 +91,7 @@ public class AddressService {
                 .anyMatch(address -> address.getId().equals(addressId));
 
         if (!exists) {
-            throw new IllegalArgumentException("Address with ID " + addressId + " does not belong to this customer.");
+            throw new AddressNotBelongToCustomerException(addressId);
         }
     }
 }

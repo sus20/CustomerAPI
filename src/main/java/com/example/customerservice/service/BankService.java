@@ -1,6 +1,10 @@
 package com.example.customerservice.service;
 
-import com.example.customerservice.exception.BankAccountNotFoundException;
+import com.example.customerservice.exception.bank.BankAccountAlreadyExistsException;
+import com.example.customerservice.exception.bank.BankAccountNotBelongToCustomerException;
+import com.example.customerservice.exception.bank.BankAccountNotFoundException;
+import com.example.customerservice.exception.bank.BankIdMismatchException;
+import com.example.customerservice.exception.customer.CustomerNotFoundException;
 import com.example.customerservice.model.Bank;
 import com.example.customerservice.model.Customer;
 import com.example.customerservice.repository.BankRepository;
@@ -10,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @AllArgsConstructor
@@ -61,7 +64,7 @@ public class BankService {
                                        .stream()
                                        .anyMatch(existingBank -> existingBank.equals(bank));
         if (hasDuplicate) {
-            throw new IllegalArgumentException("Bank account with this account number already exists.");
+            throw new BankAccountAlreadyExistsException(bank.getId());
         }
     }
 
@@ -71,19 +74,19 @@ public class BankService {
                 .anyMatch(bank -> bank.getId().equals(bankDetailsId));
 
         if (!exists) {
-            throw new IllegalArgumentException("Bank account does not belong to this customer.");
+            throw new BankAccountNotBelongToCustomerException();
         }
     }
 
     private void verifyBankIdConsistency(String bankDetailsId, Bank updatedBank) {
         if (!StringUtils.pathEquals(updatedBank.getId(), bankDetailsId)) {
-            throw new IllegalArgumentException("id in body of bank is not equals to path");
+            throw new BankIdMismatchException();
         }
     }
 
     private Customer getCustomer(String customerId) {
         return customerRepository.findById(customerId)
-                .orElseThrow(() -> new NoSuchElementException("Customer not found."));
+                .orElseThrow(() -> new CustomerNotFoundException(customerId));
     }
 
     private Bank getBank(String bankId) {

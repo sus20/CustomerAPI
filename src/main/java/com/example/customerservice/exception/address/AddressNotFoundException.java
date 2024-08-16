@@ -1,7 +1,7 @@
-package com.example.customerservice.exception;
+package com.example.customerservice.exception.address;
 
 public class AddressNotFoundException extends RuntimeException {
-    public AddressNotFoundException(String addressId){
+    public AddressNotFoundException(String addressId) {
         super("Address with ID " + addressId + " not found.");
     }
 }
