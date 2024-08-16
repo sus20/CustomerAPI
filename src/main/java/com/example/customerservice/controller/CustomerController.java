@@ -30,17 +30,12 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomer(@PathVariable String id) {
+    public ResponseEntity<Customer> getCustomerById(@PathVariable String id) {
         Customer customer = customerService.getCustomerById(id);
 
         return ObjectUtils.isEmpty(customer) ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(customer, HttpStatus.OK);
-    }
-
-    @GetMapping("/check/{customerId}")
-    public boolean isRegistered(@PathVariable String customerId) {
-        return customerService.isCustomerRegistered(customerId);
     }
 
     @PutMapping("/{id}")
@@ -56,5 +51,10 @@ public class CustomerController {
     public ResponseEntity<Void> deleteCustomer(@PathVariable String id) {
         customerService.deleteCustomer(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+   @GetMapping("/check/{id}")
+    public boolean isRegistered(@PathVariable String id) {
+        return customerService.isCustomerRegistered(id);
     }
 }
