@@ -17,17 +17,9 @@ public class BankController {
     private final BankService bankService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Bank> createBank(@RequestBody Bank bank) {
-        Bank savedBank = bankService.saveBank(bank);
-        return new ResponseEntity<>(savedBank, HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Bank> getBank(@PathVariable String id) {
-        Optional<Bank> bank = bankService.getBankById(id);
-        return bank.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<?> createBankDetails(@PathVariable String customerId, @RequestBody Bank bank) {
+        Bank createdBank = bankService.saveBank(customerId, bank);
+        return new ResponseEntity<>(createdBank, HttpStatus.CREATED);
     }
 
     @GetMapping
