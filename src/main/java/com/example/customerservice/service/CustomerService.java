@@ -1,10 +1,13 @@
 package com.example.customerservice.service;
 
-import com.example.customerservice.model.Bank;
+import com.example.customerservice.exception.CustomerNotFoundException;
 import com.example.customerservice.model.Customer;
+import com.example.customerservice.repository.AddressRepository;
+import com.example.customerservice.repository.BankRepository;
 import com.example.customerservice.repository.CustomerRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -13,15 +16,16 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final BankService bankService;
+    private final BankRepository     bankRepository;
+    private final AddressRepository  addressRepository;
 
     public Customer saveCustomer(Customer customer) {
         customer.generateID();
-        if (customer.getBankDetails() != null && customer.getBankDetails().getId() != null) {
-            Bank bank = bankService.getBankById(customer.getBankDetails().getId())
-                                    .orElseThrow(() -> new IllegalArgumentException(("Bank with ID " + customer.getBankDetails().getId() + "does not exist.")));
-            customer.setBankDetails(bank);
-
+        if(!ObjectUtils.isEmpty(customer.getAddresses())) {
+            addressRepository.saveAll(customer.getAddresses());
+        }
+        if(!ObjectUtils.isEmpty(customer.getBankAccounts())) {
+            bankRepository.saveAll(customer.getBankAccounts());
         }
         return customerRepository.save(customer);
     }
@@ -32,14 +36,17 @@ public class CustomerService {
 
     public Customer getCustomerById(String id) {
         return customerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Customer with ID " + id + " does not exist."));
+                .orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     public Customer updateCustomer(String id, Customer updatedCustomer) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Customer with ID " + id + " does not exist."));
+        verifyCustomerIdConsistency(id, updatedCustomer);
 
-        updatedCustomer.setId(customer.getId());
+        Customer existingCustomer = getCustomerById(id);
+
+        updatedCustomer.setAddresses(existingCustomer.getAddresses());
+        updatedCustomer.setBankAccounts(existingCustomer.getBankAccounts());
+
         return customerRepository.save(updatedCustomer);
     }
 
@@ -47,9 +54,13 @@ public class CustomerService {
         customerRepository.deleteById(id);
     }
 
-    public boolean isCustomerRegistered(String customerId) {
-        return customerRepository.existsById(customerId);
+    public boolean isCustomerRegistered(String id) {
+        return customerRepository.existsById(id);
+    }
+
+    private void verifyCustomerIdConsistency(String customerId, Customer customer){
+        if(!customer.getId().equals(customerId)) {
+            throw new IllegalArgumentException("Customer with ID " + customerId + " does not exist.");
+        }
     }
 }
-
-
