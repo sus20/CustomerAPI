@@ -8,11 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/banks")
+@RequestMapping("/customers/{customerId}/bank-details")
 public class BankController {
 
     private final BankService bankService;
@@ -32,20 +31,24 @@ public class BankController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Bank>> getAllBanks() {
-        List<Bank> banks = bankService.getAllBanks();
-        return new ResponseEntity<>(banks, HttpStatus.OK);
+    public ResponseEntity<List<Bank>> getAllBanks(@PathVariable String customerId) {
+            List<Bank> banks = bankService.getBanksByCustomerId(customerId);
+            return ResponseEntity.ok(banks);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Bank> updateBank(@PathVariable String id, @RequestBody Bank updatedBank) {
-        Bank bank = bankService.updateBank(id, updatedBank);
-        return new ResponseEntity<>(bank, HttpStatus.OK);
+    @PutMapping("{bankDetailsId}")
+    public ResponseEntity<Bank> updateBankDetails(@PathVariable String customerId,
+                                                  @PathVariable String bankDetailsId,
+                                                  @RequestBody Bank    updatedBank) {
+
+            Bank updatedBankDetails = bankService.updateBankDetails(customerId, bankDetailsId, updatedBank);
+            return new ResponseEntity<>(updatedBankDetails, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBank(@PathVariable String id) {
-        bankService.deleteBank(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    @DeleteMapping("/{bankDetailsId}")
+    public ResponseEntity<Void> deleteBankDetails(@PathVariable String customerId, @PathVariable String bankDetailsId) {
+            bankService.deleteBankDetails(customerId, bankDetailsId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
