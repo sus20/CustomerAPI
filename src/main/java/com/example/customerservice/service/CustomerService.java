@@ -18,6 +18,7 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final BankRepository bankRepository;
     private final AddressRepository addressRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public Customer saveCustomer(Customer customer) {
         customer.generateID();
@@ -27,10 +28,14 @@ public class CustomerService {
         if (!ObjectUtils.isEmpty(customer.getBankAccounts())) {
             bankRepository.saveAll(customer.getBankAccounts());
         }
-        return customerRepository.save(customer);
+
+        Customer savedCustomer = customerRepository.save(customer);
+        kafkaProducerService.sendMessage("customer-created-topic",savedCustomer);
+        return savedCustomer;
     }
 
     public List<Customer> getAllCustomers() {
+        List<Customer> customers = customerRepository.findAll();
         return customerRepository.findAll();
     }
 
@@ -47,11 +52,16 @@ public class CustomerService {
         updatedCustomer.setAddresses(existingCustomer.getAddresses());
         updatedCustomer.setBankAccounts(existingCustomer.getBankAccounts());
 
-        return customerRepository.save(updatedCustomer);
+        Customer savedCustomer = customerRepository.save(updatedCustomer);
+        kafkaProducerService.sendMessage("customer-update-topic", savedCustomer);
+
+        return savedCustomer;
     }
 
     public void deleteCustomer(String id) {
+        Customer customer = getCustomerById(id);
         customerRepository.deleteById(id);
+        kafkaProducerService.sendMessage("customer-delete-topic", customer);
     }
 
     public boolean isCustomerRegistered(String id) {
