@@ -36,7 +36,7 @@ public class CustomerPersistenceImpl implements ICustomerOutputPersistencePort {
     @Override
     public Optional<Customer> findById(String id) {
         Optional<CustomerEntity> customerEntity = customerRepository.findById(id);
-        return Optional.of(getCustomer(customerEntity.get()));
+        return customerEntity.map(this::getCustomer).or(() -> Optional.ofNullable(null));
     }
 
     @Override
