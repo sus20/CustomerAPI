@@ -17,24 +17,19 @@
     <description>customer-service</description>
 
     <properties>
-        <java.version>${java-version}</java.version>
-        <commons-lang3.version>3.16.0</commons-lang3.version>
-        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <cloudevents-core.version>2.1.1</cloudevents-core.version>
-        <jackson-databind.version>2.14.0</jackson-databind.version>
         <cloudevents-kafka.version>4.0.1</cloudevents-kafka.version>
-        <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
-        <spring-dotenv.version>4.0.0</spring-dotenv.version>
+        <commons-lang3.version>3.16.0</commons-lang3.version>
         <dotenv-java.version>3.0.1</dotenv-java.version>
-        <mapstruct.version>1.6.0</mapstruct.version>
-        <openapi-generator-maven-plugin.version>7.8.0</openapi-generator-maven-plugin.version>
-        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
-        <jackson-databind-nullable.version>0.2.1</jackson-databind-nullable.version>
-        <version.mapstruct-lombok>0.2.0</version.mapstruct-lombok>
-        <lombok.version>1.18.34</lombok.version>
+        <jackson-databind.version>2.14.0</jackson-databind.version>
+        <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <java-version>17</java-version>
+        <lombok.version>1.18.34</lombok.version>
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
-
+        <mapstruct.version>1.6.0</mapstruct.version>
+        <spring-dotenv.version>4.0.0</spring-dotenv.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.1.0</springdoc-openapi-starter-webmvc-ui.version>
+        <version.mapstruct-lombok>0.2.0</version.mapstruct-lombok>
     </properties>
 
     <dependencies>
@@ -130,7 +125,6 @@
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -162,7 +156,6 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 
