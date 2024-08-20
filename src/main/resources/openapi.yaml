@@ -1,0 +1,111 @@
+openapi: 3.0.1
+info:
+  title: Customer Bank API
+  version: 1.0.0
+paths:
+  /customers:
+    get:
+      summary: Get all customers
+      operationId: getAllCustomers
+      responses:
+        '200':
+          description: A list of customers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerDTO'
+    post:
+      summary: Create a customer
+      operationId: createCustomer
+      requestBody:
+        description: Customer to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerDTO'
+      responses:
+        '201':
+          description: Customer created successfully
+
+components:
+  schemas:
+    BankDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        bankName:
+          type: string
+        accountNumber:
+          type: string
+        accountType:
+          type: string
+        sortCode:
+          type: string
+          pattern: '\\d{6}'
+        swiftCode:
+          type: string
+          pattern: '^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$'
+      required:
+        - bankName
+        - accountNumber
+        - accountType
+        - sortCode
+        - swiftCode
+
+    AddressDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+      required:
+        - street
+        - city
+        - state
+        - postalCode
+        - country
+
+    CustomerDTO:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        middleName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        phoneNumber:
+          type: string
+          pattern: '\\+?[0-9]{10,15}'
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressDTO'
+        bankAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankDTO'
+      required:
+        - firstName
+        - middleName
+        - lastName
+        - email
+        - phoneNumber
