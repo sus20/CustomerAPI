@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class CustomerService implements ICustomerInputPort {
+public class CustomerServiceImpl implements ICustomerInputPort {
 
     private final ICustomerOutputPersistencePort customerOutputPersistencePort;
     private final IAddressOutputPersistencePort addressOutputPersistencePort;

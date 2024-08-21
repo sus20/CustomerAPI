@@ -21,11 +21,10 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AddressService implements IAddressInputPort {
+public class AddressServiceImpl implements IAddressInputPort {
 
     private final ICustomerOutputPersistencePort customerOutputPersistencePort;
     private final IAddressOutputPersistencePort addressOutputPersistencePort;
-
     private final IAddressEventOutputPort addressEventOutputPort;
 
     public Address saveAddress(String customerId, Address address) {
