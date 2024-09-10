@@ -32,7 +32,7 @@ public class CustomerDTO {
     private String email;
 
     @NotBlank(message = "{NotBlank.phoneNumber}")
-    @Pattern(regexp = "\\+?[0-9]{10,15}", message = "{Pattern.phoneNumber}")
+    @Pattern(regexp = "^\\+?([0-9][\\s-]?){10,15}$", message = "{Pattern.phoneNumber}")
     private String phoneNumber;
 
     private List<AddressDTO>     addresses = new ArrayList<>();
