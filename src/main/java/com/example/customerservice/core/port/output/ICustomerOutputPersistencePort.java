@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface ICustomerOutputPersistencePort {
     Customer save(Customer customer);
-    boolean existsById(String id);
     void deleteById(String id);
     Optional<Customer> findById(String id);
     List<Customer> findAll();
