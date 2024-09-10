@@ -78,8 +78,8 @@ set_java_home() {
   fi
 }
 
-# hash string like Java String::hashCode
-hash_string() {
+# hash String like Java String::hashCode
+hash_String() {
   str="${1:-}" h=0
   while [ -n "$str" ]; do
     char="${str%"${str#?}"}"
