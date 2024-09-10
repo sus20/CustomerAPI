@@ -73,10 +73,6 @@ public class CustomerServiceImpl implements ICustomerInputPort {
         log.info("Customer with id: " + customer.getId() + " deleted.");
     }
 
-    public boolean isCustomerRegistered(String id) {
-        return customerOutputPersistencePort.existsById(id);
-    }
-
     private void verifyCustomerIdConsistency(String customerId, Customer customer) {
         if (!customer.getId().equals(customerId)) {
             throw new CustomerNotFoundException(customerId);
