@@ -24,11 +24,6 @@ public class CustomerPersistenceImpl implements ICustomerOutputPersistencePort {
     }
 
     @Override
-    public boolean existsById(String id) {
-        return customerRepository.existsById(id);
-    }
-
-    @Override
     public void deleteById(String id) {
         customerRepository.deleteById(id);
     }
