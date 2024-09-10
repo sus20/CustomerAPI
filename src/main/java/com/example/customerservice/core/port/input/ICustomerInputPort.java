@@ -10,5 +10,4 @@ public interface ICustomerInputPort {
     Customer getCustomerById(String id);
     Customer updateCustomer(String id, Customer updatedCustomer);
     void deleteCustomer(String id);
-    boolean isCustomerRegistered(String id);
 }
